@@ -1,6 +1,6 @@
 # Opentrons Flex Protocols for 384-Well Sample Preparation for Nontargeted Exposomics
 
-Python-based Opentrons Flex protocols and labware definitions for ultra-high-throughput protein-precipitation sample preparation of human plasma, performed entirely in the 384-well format. These protocols automate the sample preparation workflow described in:
+Python-based Opentrons Flex protocols and labware definitions for ultra-high-throughput protein-precipitation sample preparation of human plasma, performed in the 384-well format. These protocols automate the sample preparation workflow described in:
 
 > **An Ultra-High-Throughput 384-Well Sample Preparation Workflow for Nontargeted Exposomics Across Four LC-HRMS Assays**
 > [Author list and journal citation to be added upon publication]

@@ -9,9 +9,9 @@ Python-based Opentrons Flex protocols and labware definitions for ultra-high-thr
 
 This repository contains two protocols for the Opentrons Flex liquid handler that together prepare a full 384-well plate — up to **288 study samples plus QA/QC materials** — from only **30 µL of plasma per sample**.
 
-A single protein-precipitation extraction is split into aliquots for two complementary chromatographic platforms, each acquired in positive and negative electrospray ionization mode, giving **four nontargeted assays from one preparation**. There is no evaporation or reconstitution step, which avoids the compound-specific analyte loss those steps introduce.
+A single protein-precipitation extraction is split into aliquots for two complementary chromatographic platforms, each acquired in positive and negative electrospray ionization mode, giving **four nontargeted assays from one preparation**.
 
-One plate takes approximately **75 minutes** of wall-clock time, of which about 45 minutes is active labor and 30 minutes is unattended equilibration.
+Sample preparation requires approximately **75 minutes**, of which about 45 minutes is active labor and 30 minutes is unattended equilibration.
 
 The protocols use the Opentrons Flex 96-channel 1000 µL pipette. Because the 96-channel head has 9 mm tip spacing and a 384-well plate has 4.5 mm well spacing, one tip pickup addresses a quarter of the plate at a time — see [96-well to 384-well mapping](#96-well-to-384-well-mapping) below.
 
@@ -19,7 +19,7 @@ The protocols use the Opentrons Flex 96-channel 1000 µL pipette. Because the 96
 
 | Step | Protocol | Description | Hands-on time |
 |------|----------|-------------|---------------|
-| 1 | — | **Off-robot:** Thaw plasma at 4 °C (1–2 h). Equilibrate temperature modules, centrifuge and thermomixer to 4 °C; preheat heat sealer to 165 °C | ~10 min |
+| 1 | — | **Off-robot:** Thaw plasma at 4 °C (1 h). Equilibrate temperature modules, centrifuge and thermomixer to 4 °C; preheat heat sealer to 165 °C | ~10 min |
 | 2 | — | **Off-robot:** Vortex-mix racks 10 min at 1,100 rpm, 4 °C; centrifuge 2 min at 4,500 rpm, 4 °C | ~15 min |
 | 3 | — | **Off-robot:** Scan sample racks and verify identifiers against the run list | ~5 min |
 | 4 | `step1_solvent_addition_and_sample_aliquoting.py` | Dispense 90 µL extraction solvent into the 384-well plate, then 30 µL plasma from each source rack | ~15 min |

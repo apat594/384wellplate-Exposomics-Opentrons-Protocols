@@ -7,13 +7,13 @@ Python-based Opentrons Flex protocols and labware definitions for ultra-high-thr
 
 ## Overview
 
-This repository contains two protocols for the Opentrons Flex liquid handler that together prepare a full 384-well plate — up to **288 study samples plus QA/QC materials** — from only **30 µL of plasma per sample**.
+This repository contains two protocols for the Opentrons Flex liquid handler that together prepare a full 384-well plate — up to **288 study samples plus QA/QC materials** — from **30 µL of plasma per sample**.
 
-A single protein-precipitation extraction is split into aliquots for two complementary chromatographic platforms, each acquired in positive and negative electrospray ionization mode, giving **four nontargeted assays from one preparation**.
+A single protein-precipitation extraction is divided into aliquots for two complementary chromatographic platforms, each acquired in positive and negative electrospray ionization mode, yielding **four nontargeted assays from one preparation**.
 
-Sample preparation requires approximately **75 minutes**, of which about 45 minutes is active labor and 30 minutes is unattended equilibration.
+Sample preparation requires approximately **75 minutes**, comprising approximately 45 minutes of active labor and 30 minutes of unattended equilibration.
 
-The protocols use the Opentrons Flex 96-channel 1000 µL pipette. Because the 96-channel head has 9 mm tip spacing and a 384-well plate has 4.5 mm well spacing, one tip pickup addresses a quarter of the plate at a time — see [96-well to 384-well mapping](#96-well-to-384-well-mapping) below.
+The protocols employ the Opentrons Flex 96-channel 1000 µL pipette. Because the 96-channel head has 9 mm tip spacing and a 384-well plate has 4.5 mm well spacing, a single tip pickup addresses one quarter of the plate — see [96-well to 384-well mapping](#96-well-to-384-well-mapping) below.
 
 ## Workflow
 
@@ -24,14 +24,14 @@ The protocols use the Opentrons Flex 96-channel 1000 µL pipette. Because the 96
 | 3 | — | **Off-robot:** Scan sample racks and verify identifiers against the run list | ~5 min |
 | 4 | `step1_solvent_addition_and_sample_aliquoting.py` | Dispense 90 µL extraction solvent into the 384-well plate, then 30 µL plasma from each source rack | ~15 min |
 | 5 | — | **Off-robot:** Heat-seal at 165 °C for 1.5 s and press with a roller | ~5 min |
-| 6 | — | **Off-robot:** Vortex-mix 30 min at 1,100 rpm, 4 °C to precipitate protein and extract analytes. *Unattended* — set up Step 2 and return remaining samples to −80 °C during this time | 0 min |
+| 6 | — | **Off-robot:** Vortex-mix 30 min at 1,100 rpm, 4 °C to precipitate protein and extract analytes. *Unattended* — prepare Step 2 and return remaining samples to −80 °C storage during this interval | 0 min |
 | 7 | — | **Off-robot:** Centrifuge 2 min at 4,500 rpm, 4 °C to pellet precipitated protein | ~5 min |
 | 8 | `step2_dilution_and_supernatant_transfer.py` | Dispense 60 µL water into the C18 plate, then transfer 30 µL supernatant to C18 and 40 µL to HILIC | ~15 min |
 | 9 | — | **Off-robot:** Heat-seal both plates, centrifuge, then vortex-mix 10 min at 2,000 rpm, 4 °C | ~10 min |
 
-After Step 9, plates are ready to load into the LC autosampler.
+Following Step 9, plates are ready for loading into the LC autosampler.
 
-Scaled to a full study, the workflow prepares 1,000 samples in roughly 3 hours of active labor (about 5 hours total processing time) on a single system.
+Scaled to a full study, the workflow prepares 1,000 samples in approximately 3 hours of active labor (approximately 5 hours of total processing time) on a single system.
 
 ## Protocol Details
 
@@ -39,17 +39,17 @@ Scaled to a full study, the workflow prepares 1,000 samples in roughly 3 hours o
 
 Dispenses 90 µL of extraction solvent (60:40 v/v methanol/acetonitrile containing isotope-labeled internal standards) into each well of an intermediate 384-well plate, then transfers 30 µL of plasma from each 96-well Matrix source rack into its assigned quadrant.
 
-Solvent is added **before** sample so that plasma is delivered into solvent and protein precipitation begins on contact.
+Solvent is added **before** sample, such that plasma is delivered into solvent and protein precipitation is initiated on contact.
 
 **Key features:**
-- Solvent tips are pre-wetted three times; volatile organic solvent otherwise evaporates inside a dry tip and the first deliveries come up short
-- Extraction solvent is drawn from a single reservoir well using three columns of the tip head, with a −9 mm X offset that centres those columns in the well — this avoids the large overfill a full-width open reservoir would require
-- Leading air plugs and trailing air gaps prevent dripping in transit
-- Blow-out occurs above the liquid and before the tip contacts the well wall, so nothing is re-aspirated or carried between wells
-- A 4-second post-aspirate delay lets the viscous plasma column settle in the tip before the head moves
-- The protocol pauses between racks, so only one rack is uncapped and off ice at a time
+- Solvent tips are pre-wetted three times; in the absence of pre-wetting, volatile organic solvent evaporates within a dry tip and the initial deliveries are volumetrically inaccurate
+- Extraction solvent is drawn from a single reservoir well using three columns of the tip head, with a −9 mm X offset that centres those columns within the well, avoiding the substantial overfill that a full-width open reservoir would require
+- Leading air plugs and trailing air gaps prevent dripping during transit
+- Blow-out is performed above the liquid surface and prior to tip contact with the well wall, preventing re-aspiration and carryover between wells
+- A 4-second post-aspirate delay allows the viscous plasma column to stabilize within the tip before the head is repositioned
+- The protocol pauses between racks, such that only one rack is uncapped and off ice at any time
 
-**Deck layout** (slots vary with `NUM_SAMPLE_PLATES`):
+**Deck layout** (slot occupancy varies with `NUM_SAMPLE_PLATES`):
 
 | Slot | Labware |
 |------|---------|
@@ -65,18 +65,18 @@ Solvent is added **before** sample so that plasma is delivered into solvent and 
 
 **Manual interventions (protocol pauses):**
 1. Place the first uncapped sample rack in D1
-2. Replace the sample rack between each source rack, ending with the QA/QC rack
+2. Replace the sample rack between each source rack, concluding with the QA/QC rack
 
 ### Step 2: Dilution and Supernatant Transfer
 
-Dispenses 60 µL of UHPLC-MS-grade water into the final C18 plate, then transfers supernatant from the centrifuged intermediate plate to two final plates on a single set of filter tips per quadrant: 30 µL to the C18 plate (a 2:1 dilution into the water already present) and 40 µL to the HILIC plate (undiluted).
+Dispenses 60 µL of UHPLC-MS-grade water into the final C18 plate, then transfers supernatant from the centrifuged intermediate plate to two final plates using a single set of filter tips per quadrant: 30 µL to the C18 plate (a 2:1 dilution into the water previously dispensed) and 40 µL to the HILIC plate (undiluted).
 
 **Key features:**
-- Supernatant is aspirated at a fixed 4.5 mm above the well bottom, clear of the precipitated protein pellet. This is the single most consequential parameter in the workflow — lower settings draw protein into the transfer and contaminate the extract
-- Aspiration is deliberately slow (5 µL/s) to preserve transfer fidelity from the shallow 384-well geometry
-- Descent to the aspiration height is speed-limited so the approach does not disturb the pellet
-- Filter tips throughout the supernatant transfer
-- Tip-touch against the well wall after each dispense to shed the hanging droplet
+- Supernatant is aspirated at a fixed height of 4.5 mm above the well bottom, clear of the precipitated protein pellet. This is the most critical parameter in the workflow; lower settings draw protein into the transfer and contaminate the extract
+- Aspiration is performed at a reduced rate (5 µL/s) to preserve transfer fidelity from the shallow 384-well geometry
+- Descent to the aspiration height is speed-limited to avoid disturbing the pellet
+- Filter tips are used throughout the supernatant transfer
+- A tip-touch against the well wall following each dispense removes residual droplets
 
 **Deck layout:**
 
@@ -94,11 +94,11 @@ Dispenses 60 µL of UHPLC-MS-grade water into the final C18 plate, then transfer
 | D3 | Trash bin |
 
 **Manual interventions (protocol pauses):**
-1. After water addition: place the centrifuged intermediate plate in D1 and remove its seal
+1. Following water addition: place the centrifuged intermediate plate in D1 and remove its seal
 
 ## 96-well to 384-well mapping
 
-The Flex 96-channel head has 9 mm tip spacing; a 384-well plate has 4.5 mm well spacing. One tip pickup therefore lands on every other row and every other column — one of four interleaved 96-well quadrants. Each quadrant is named by the well the head lands on:
+The Flex 96-channel head has 9 mm tip spacing; a 384-well plate has 4.5 mm well spacing. A single tip pickup therefore addresses every other row and every other column — one of four interleaved 96-well quadrants. Each quadrant is designated by the well on which the head lands:
 
 | Anchor well | Covers |
 |-------------|--------|
@@ -107,7 +107,7 @@ The Flex 96-channel head has 9 mm tip spacing; a 384-well plate has 4.5 mm well 
 | `B1` | even rows, odd columns |
 | `B2` | even rows, even columns |
 
-Source racks fill quadrants in order and the QA/QC rack takes the next free one:
+Source racks occupy quadrants in order, and the QA/QC rack occupies the next available quadrant:
 
 | `NUM_SAMPLE_PLATES` | Sample quadrants | QA/QC quadrant | Study samples |
 |---|---|---|---|
@@ -115,21 +115,21 @@ Source racks fill quadrants in order and the QA/QC rack takes the next free one:
 | 2 | `A1`, `A2` | `B1` | 192 |
 | 3 | `A1`, `A2`, `B1` | `B2` | 288 |
 
-Because quadrants are interleaved rather than blocked, study samples and QA/QC materials are distributed across the whole plate. This is what allows plate row and column position effects to be evaluated after acquisition.
+Because quadrants are interleaved rather than contiguous, study samples and QA/QC materials are distributed across the entire plate. This arrangement permits plate row and column position effects to be evaluated following acquisition.
 
-Both plates in Step 2 share the source plate's geometry, so each quadrant transfers straight across — anchor `A1` on the intermediate plate goes to anchor `A1` on the C18 and HILIC plates. Sample identity is preserved by position, with no remapping. Track each sample from its 96-well source position to its 384-well destination position and verify against the run list before starting.
+Both destination plates in Step 2 share the source plate geometry, so each quadrant maps directly — anchor `A1` on the intermediate plate corresponds to anchor `A1` on the C18 and HILIC plates. Sample identity is preserved by position, requiring no remapping. Each sample should be tracked from its 96-well source position to its 384-well destination position and verified against the run list prior to initiating the run.
 
 ### QA/QC capacity
 
-`ES_DEST_WELLS` determines which wells receive extraction solvent, so it also sets how many QA/QC materials a run can hold. Solvent must always reach every well that will receive sample.
+`ES_DEST_WELLS` determines which wells receive extraction solvent and therefore also determines the number of QA/QC materials a run can accommodate. Solvent must reach every well that will receive sample.
 
-| `NUM_SAMPLE_PLATES` | QA/QC wells with solvent, as written | To reach a full 96 QC materials |
+| `NUM_SAMPLE_PLATES` | QA/QC wells receiving solvent, as configured | To accommodate a full 96 QC materials |
 |---|---|---|
-| 1 | 48 (6 columns of the source rack) | add `"B13"`, `"B19"` to `ES_DEST_WELLS` |
-| 2 | 48 (6 columns of the source rack) | add `"B13"`, `"B19"` to `ES_DEST_WELLS` |
-| 3 | 96 — the whole quadrant | nothing to change |
+| 1 | 48 (6 columns of the source rack) | add `"B13"` and `"B19"` to `ES_DEST_WELLS` |
+| 2 | 48 (6 columns of the source rack) | add `"B13"` and `"B19"` to `ES_DEST_WELLS` |
+| 3 | 96 (the complete quadrant) | no modification required |
 
-With 3 sample racks every well on the plate already receives solvent, so a full 96-material QA/QC rack works as written. With 1 or 2 racks the defaults cover a typical partially filled QA/QC rack; adding the `B13` and `B19` anchors gives four B-row anchors, which fill the entire QA/QC quadrant and support up to 96 QC materials.
+With 3 sample racks, every well on the plate receives solvent, and a full 96-material QA/QC rack is therefore supported without modification. With 1 or 2 sample racks, the default configuration accommodates a partially filled QA/QC rack; addition of the `B13` and `B19` anchors provides four B-row anchors, which together fill the entire QA/QC quadrant and support up to 96 QC materials.
 
 ## Requirements
 
@@ -151,9 +151,9 @@ With 3 sample racks every well on the plate already receives solvent, so a full 
 | Matrix 96-well tube rack, 1 mL | `matrix96well_96_tuberack_1000ul` | 14-754-690 | Step 1 |
 | Opentrons Tough 4-well reservoir, 72 mL | `opentrons_tough_4_reservoir_72ml` | — | Step 1 |
 | NEST 1-well reservoir, 195 mL | `nest_1_reservoir_195ml` | 999-00078 | Step 2 |
-| Easy Pierce heat-sealing foil | — | AB-0757 | Off-robot, after Steps 1 and 2 |
+| Easy Pierce heat-sealing foil | — | AB-0757 | Off-robot, following Steps 1 and 2 |
 
-The API load name is what the protocol calls and is the unambiguous identifier — match it when selecting labware in the Opentrons App. Verify catalog numbers against current vendor listings before ordering.
+The API load name is the identifier called by the protocol and is unambiguous; it should be matched when selecting labware in the Opentrons App. Catalog numbers should be verified against current vendor listings prior to ordering.
 
 ### Reagents
 
@@ -162,9 +162,9 @@ The API load name is what the protocol calls and is the unambiguous identifier �
 | 60:40 (v/v) methanol/acetonitrile with isotope-labeled internal standards | Extraction solvent — protein precipitation (Step 1) |
 | UHPLC-MS-grade water | Dilution of the C18 aliquot (Step 2) |
 
-Use UHPLC-MS-grade solvents throughout to minimize background contamination. Prepare the methanol/acetonitrile mixture in bulk, store at 4 °C in a pre-cleaned glass bottle, and add internal standards to the working aliquot for each batch.
+UHPLC-MS-grade solvents should be used throughout to minimize background contamination. The methanol/acetonitrile mixture is prepared in bulk, stored at 4 °C in a pre-cleaned glass bottle, with internal standards added to the working aliquot for each batch.
 
-**Volumes required**, computed from the wells each configuration fills:
+**Dispensed volumes**, calculated from the number of wells each configuration fills:
 
 | `NUM_SAMPLE_PLATES` | Wells filled | Extraction solvent (90 µL/well) | Water (60 µL/well) |
 |---|---|---|---|
@@ -172,18 +172,18 @@ Use UHPLC-MS-grade solvents throughout to minimize background contamination. Pre
 | 2 | 240 | 21.6 mL | 14.4 mL |
 | 3 | 384 | 34.6 mL | 23.0 mL |
 
-Add reservoir dead volume on top of these figures; the reservoirs are filled generously so they cannot run dry mid-run.
+These values represent dispensed volume only and exclude reservoir dead volume. Each reservoir should therefore be charged with a defined excess above the tabulated figure, sufficient to maintain the liquid level above the aspiration height (`ES_asp_depth`, 2 mm above the reservoir floor) for the duration of the run. Dead volume is dependent on reservoir geometry and on the aspiration height in use, and should be determined empirically for the specific labware employed. Insufficient excess will result in partial aspiration of air during the final deliveries, with a corresponding loss of volumetric accuracy in the affected wells.
 
 ## Custom Labware
 
-The 384-well plate and the Matrix tube rack require custom labware definitions that are not in the default Opentrons labware library. They are provided in the `labware/` directory:
+The 384-well plate and the Matrix tube rack require custom labware definitions that are not included in the default Opentrons labware library. These definitions are provided in the `labware/` directory:
 
 | File | Labware | Used In |
 |------|---------|---------|
 | `thermofisher_384_wellplate_250ul.json` | Thermo Fisher 384-well plate, 250 µL | Steps 1, 2 |
 | `matrix96well_96_tuberack_1000ul.json` | Matrix 96-well tube rack, 1 mL | Step 1 |
 
-Upload these JSON files to the Opentrons App before running the protocols. The reservoirs and all tip racks are stock Opentrons definitions and need no upload.
+These JSON files must be uploaded to the Opentrons App prior to running the protocols. The reservoirs and all tip racks are stock Opentrons definitions and do not require upload.
 
 ## Repository Structure
 
@@ -204,14 +204,14 @@ Upload these JSON files to the Opentrons App before running the protocols. The r
 
 1. Upload both protocol files and both custom labware definitions to the Opentrons App.
 2. Set `NUM_SAMPLE_PLATES` at the top of **both** protocols to the same value (1, 2, or 3).
-3. Set `sample_asp_depth` in Step 1 to suit your sample volume and matrix (see below).
+3. Set `sample_asp_depth` in Step 1 according to the sample volume and matrix in use (see below).
 4. Calibrate the Flex 96-channel pipette and verify the deck layout for each step.
-5. Load tips in **columns 1–3 only** of the 200 µL solvent tip racks. All other racks are full.
-6. Fill the reservoirs before starting each protocol.
+5. Load tips in **columns 1–3 only** of the 200 µL solvent tip racks. All remaining racks are fully loaded.
+6. Charge the reservoirs prior to initiating each protocol.
 7. Run Step 1, perform the off-robot sealing, mixing and centrifugation steps, then run Step 2.
 8. Follow the on-screen pause prompts when replacing racks and plates.
 
-For a dry run, set `RETURN_TIPS_TO_RACK = True` to return every tip to its rack instead of discarding it. Set it back to `False` before running real samples.
+For validation runs, `RETURN_TIPS_TO_RACK = True` returns each tip to its rack rather than discarding it. This parameter must be reset to `False` before processing study samples.
 
 ## Adjustable Parameters
 
@@ -220,18 +220,18 @@ Volumes, flow rates and heights are defined as named variables at the top of eac
 | Parameter | Default | Protocol | Notes |
 |-----------|---------|----------|-------|
 | `sample_vol` | 30 µL | Step 1 | Plasma per sample |
-| `sample_asp_depth` | 3 mm | Step 1 | Above the tube bottom. Tune to sample volume and matrix; 3–6 mm is the working range, with 3 mm for low-volume specimens |
+| `sample_asp_depth` | 3 mm | Step 1 | Above the tube bottom. Adjust according to sample volume and matrix; 3–6 mm is the working range, with 3 mm applied to low-volume specimens |
 | `ES_vol` | 90 µL | Step 1 | Extraction solvent per well |
 | `ES_asp_rate` / `ES_disp_rate` | 92 / 40 µL/s | Step 1 | |
 | `ES_asp_depth` | 2 mm | Step 1 | Above the reservoir bottom |
-| `RESERVOIR_X_OFFSET` | −9 mm | Step 1 | Centres the three tip columns in the reservoir well |
-| `solvent_vol` | 60 µL | Step 2 | Water into the C18 plate |
-| `sup_vol_C18` | 30 µL | Step 2 | Gives a 2:1 dilution |
+| `RESERVOIR_X_OFFSET` | −9 mm | Step 1 | Centres the three tip columns within the reservoir well |
+| `solvent_vol` | 60 µL | Step 2 | Water dispensed into the C18 plate |
+| `sup_vol_C18` | 30 µL | Step 2 | Yields a 2:1 dilution |
 | `sup_vol_HILIC` | 40 µL | Step 2 | Undiluted |
-| `sup_asp_depth` | 4.5 mm | Step 2 | Above the well bottom, clear of the protein pellet. **Do not lower without re-validating** |
-| `sup_asp_rate` / `sup_disp_rate` | 5 / 10 µL/s | Step 2 | Deliberately slow for the shallow 384-well geometry |
+| `sup_asp_depth` | 4.5 mm | Step 2 | Above the well bottom, clear of the protein pellet. **Should not be reduced without revalidation** |
+| `sup_asp_rate` / `sup_disp_rate` | 5 / 10 µL/s | Step 2 | Reduced rates are applied to accommodate the shallow 384-well geometry |
 
-> **Headroom on the 50 µL tips.** Sample and supernatant transfers use the full 50 µL tip capacity: in Step 1, a 20 µL leading air plug plus 30 µL plasma; in Step 2, a 15 µL plug plus 30 µL supernatant plus a 5 µL air gap. There is no spare volume. Increasing `sample_vol`, `sup_vol_C18`, or any air gap will exceed tip capacity and the protocol will fail — reduce the air plug, or move to a larger tip, if you need a bigger transfer.
+> **Tip capacity constraint.** Sample and supernatant transfers utilize the full 50 µL tip capacity: in Step 1, a 20 µL leading air plug plus 30 µL plasma; in Step 2, a 15 µL leading air plug plus 30 µL supernatant plus a 5 µL air gap. No additional capacity remains. Any increase to `sample_vol`, `sup_vol_C18`, or to an air gap volume will exceed tip capacity and cause the protocol to fail. A larger transfer volume requires a corresponding reduction in the air plug, or the use of a higher-capacity tip.
 
 ## Citation
 
@@ -243,7 +243,7 @@ To reference a specific version of the code, please also cite the archived relea
 
 > [Zenodo DOI to be added upon first release]
 
-Machine-readable citation metadata is in [CITATION.cff](CITATION.cff); GitHub renders it as the "Cite this repository" button. Each tagged release is archived and versioned, so the version you cite identifies exactly which protocol was run.
+Machine-readable citation metadata is provided in [CITATION.cff](CITATION.cff), which GitHub renders as the "Cite this repository" button. Each tagged release is archived and versioned, such that the cited version identifies precisely which protocol was executed.
 
 ## Authors
 

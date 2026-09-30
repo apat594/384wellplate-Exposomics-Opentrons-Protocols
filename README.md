@@ -70,7 +70,7 @@ Dispenses 90 µL of extraction solvent (60:40 v/v methanol/acetonitrile containi
 Dispenses 60 µL of UHPLC-MS-grade water into the final C18 plate, then transfers supernatant from the centrifuged intermediate plate to two final plates using a single set of filter tips per quadrant: 30 µL to the C18 plate (a 2:1 dilution into the water previously dispensed) and 40 µL to the HILIC plate (undiluted).
 
 **Key features:**
-- Supernatant is aspirated at a fixed height of 4.5 mm above the well bottom, clear of the precipitated protein pellet. This is the most critical parameter in the workflow; lower settings draw protein into the transfer and contaminate the extract
+- Supernatant is aspirated at a fixed height of 4.5 mm above the well bottom, clear of the precipitated protein pellet. This is the most critical parameter in the workflow; lower settings draw protein into the transfer and contaminate the extract. This can be adjusted depending on the sample volume
 - Aspiration is performed at a reduced rate (5 µL/s) to preserve transfer fidelity from the shallow 384-well geometry
 - Descent to the aspiration height is speed-limited to avoid disturbing the pellet
 - Filter tips are used throughout the supernatant transfer

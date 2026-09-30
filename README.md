@@ -19,17 +19,19 @@ The protocols employ the Opentrons Flex 96-channel 1000 µL pipette. Because the
 
 | Step | Protocol | Description | Hands-on time |
 |------|----------|-------------|---------------|
-| 1 | — | **Off-robot:** Thaw plasma at 4 °C (1 h). Equilibrate temperature modules, centrifuge and thermomixer to 4 °C; preheat heat sealer to 165 °C | ~10 min |
-| 2 | — | **Off-robot:** Vortex-mix racks 10 min at 1,100 rpm, 4 °C; centrifuge 2 min at 4,500 rpm, 4 °C | ~15 min |
+| 1 | — | **Off-robot:** Thaw plasma at 4 °C (1 h). Equilibrate temperature modules, centrifuge and thermomixer to 4 °C; preheat heat sealer to 165 °C | ~5 min |
+| 2 | — | **Off-robot:** Vortex-mix racks 10 min at 1,100 rpm, 4 °C; centrifuge 2 min at 4,500 rpm, 4 °C | ~5 min |
 | 3 | — | **Off-robot:** Scan sample racks and verify identifiers against the run list | ~5 min |
-| 4 | `step1_solvent_addition_and_sample_aliquoting.py` | Dispense 90 µL extraction solvent into the 384-well plate, then 30 µL plasma from each source rack | ~15 min |
+| 4 | `step1_solvent_addition_and_sample_aliquoting.py` | Dispense 90 µL extraction solvent into the 384-well plate, then 30 µL plasma from each source rack | ~10 min |
 | 5 | — | **Off-robot:** Heat-seal at 165 °C for 1.5 s and press with a roller | ~5 min |
 | 6 | — | **Off-robot:** Vortex-mix 30 min at 1,100 rpm, 4 °C to precipitate protein and extract analytes. *Unattended* — prepare Step 2 and return remaining samples to −80 °C storage during this interval | 0 min |
-| 7 | — | **Off-robot:** Centrifuge 2 min at 4,500 rpm, 4 °C to pellet precipitated protein | ~5 min |
-| 8 | `step2_dilution_and_supernatant_transfer.py` | Dispense 60 µL water into the C18 plate, then transfer 30 µL supernatant to C18 and 40 µL to HILIC | ~15 min |
-| 9 | — | **Off-robot:** Heat-seal both plates, centrifuge, then vortex-mix 10 min at 2,000 rpm, 4 °C | ~10 min |
+| 7 | — | **Off-robot:** Centrifuge 2 min at 4,500 rpm, 4 °C to pellet precipitated protein | 0 min |
+| 8 | `step2_dilution_and_supernatant_transfer.py` | Dispense 60 µL water into the C18 plate, then transfer 30 µL supernatant to C18 and 40 µL to HILIC | ~10 min |
+| 9 | — | **Off-robot:** Heat-seal both plates, centrifuge, then vortex-mix 10 min at 2,000 rpm, 4 °C | ~5 min |
 
 Following Step 9, plates are ready for loading into the LC autosampler.
+
+Hands-on time refers to operator-attended time only and excludes walk-away intervals such as thawing, vortex-mixing and centrifugation, during which the subsequent step may be prepared. The tabulated values sum to the approximately 45 minutes of active labor stated above; the 30-minute equilibration in Step 6 accounts for the remainder of the approximately 75-minute total.
 
 Scaled to a full study, the workflow prepares 1,000 samples in approximately 3 hours of active labor (approximately 5 hours of total processing time) on a single system.
 

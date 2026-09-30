@@ -1,0 +1,68 @@
+cff-version: 1.2.0
+title: >-
+  Opentrons Flex Protocols for 384-Well Sample Preparation for
+  Nontargeted Exposomics
+message: >-
+  If you use these protocols, please cite the associated paper (see
+  preferred-citation below). To reference a specific version of the code,
+  please also cite the archived software release.
+type: software
+abstract: >-
+  Opentrons Flex Protocol API v2 protocols and custom labware definitions for
+  automated protein-precipitation sample preparation of human plasma performed
+  entirely in the 384-well format. A single 30 uL extraction yields aliquots for
+  two complementary chromatographic platforms in positive and negative
+  electrospray ionization mode, giving four nontargeted LC-HRMS assays from one
+  preparation of up to 288 study samples plus QA/QC materials per plate.
+authors:
+  - family-names: Cardelino
+    given-names: Maria
+    affiliation: Emory University
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: Patel
+    given-names: Aryan
+    affiliation: Emory University
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: Mullins
+    given-names: Catherine
+    affiliation: Emory University
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+  - family-names: Walker
+    given-names: Douglas I.
+    affiliation: Emory University
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+version: 1.0.0
+date-released: "2026-09-30"
+license: MIT
+# Update these if the repository moves.
+repository-code: "https://github.com/CLUES-Emory/384wellplate-Exposomics-Opentrons-Protocols"
+url: "https://github.com/CLUES-Emory/384wellplate-Exposomics-Opentrons-Protocols"
+# TODO after the first Zenodo release: add the version DOI here, e.g.
+# doi: "10.5281/zenodo.XXXXXXX"
+keywords:
+  - exposomics
+  - metabolomics
+  - LC-HRMS
+  - sample preparation
+  - laboratory automation
+  - Opentrons
+  - Opentrons Flex
+  - high-throughput
+  - 384-well
+  - protein precipitation
+preferred-citation:
+  type: article
+  title: >-
+    An Ultra-High-Throughput 384-Well Sample Preparation Workflow for
+    Nontargeted Exposomics Across Four LC-HRMS Assays
+  authors:
+    - family-names: Cardelino
+      given-names: Maria
+    - family-names: Patel
+      given-names: Aryan
+    - family-names: Mullins
+      given-names: Catherine
+    - family-names: Walker
+      given-names: Douglas I.
+  year: 2026
+  # TODO on acceptance: add journal, volume, issue, start/end pages and doi.

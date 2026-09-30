@@ -33,22 +33,18 @@ Following Step 9, plates are ready for loading into the LC autosampler.
 
 Hands-on time refers to operator-attended time only and excludes walk-away intervals such as thawing, vortex-mixing and centrifugation, during which the subsequent step may be prepared. The tabulated values sum to the approximately 45 minutes of active labor stated above; the 30-minute equilibration in Step 6 accounts for the remainder of the approximately 75-minute total.
 
-Scaled to a full study, the workflow prepares 1,000 samples in approximately 3 hours of active labor (approximately 5 hours of total processing time) on a single system.
-
 ## Protocol Details
 
 ### Step 1: Extraction Solvent Addition and Sample Aliquoting
 
 Dispenses 90 µL of extraction solvent (60:40 v/v methanol/acetonitrile containing isotope-labeled internal standards) into each well of an intermediate 384-well plate, then transfers 30 µL of plasma from each 96-well Matrix source rack into its assigned quadrant.
 
-Solvent is added **before** sample, such that plasma is delivered into solvent and protein precipitation is initiated on contact.
-
 **Key features:**
 - Solvent tips are pre-wetted three times; in the absence of pre-wetting, volatile organic solvent evaporates within a dry tip and the initial deliveries are volumetrically inaccurate
 - Extraction solvent is drawn from a single reservoir well using three columns of the tip head, with a −9 mm X offset that centres those columns within the well, avoiding the substantial overfill that a full-width open reservoir would require
 - Leading air plugs and trailing air gaps prevent dripping during transit
 - Blow-out is performed above the liquid surface and prior to tip contact with the well wall, preventing re-aspiration and carryover between wells
-- A 4-second post-aspirate delay allows the viscous plasma column to stabilize within the tip before the head is repositioned
+- A 4-second post-aspirate delay allows the viscous plasma to stabilize within the tip before the pipette head is repositioned
 - The protocol pauses between racks, such that only one rack is uncapped and off ice at any time
 
 **Deck layout** (slot occupancy varies with `NUM_SAMPLE_PLATES`):
@@ -56,8 +52,8 @@ Solvent is added **before** sample, such that plasma is delivered into solvent a
 | Slot | Labware |
 |------|---------|
 | A1 | 50 µL tip rack (sample rack 1) |
-| A2 | 50 µL tip rack (sample rack 2) — 2 or 3 racks only |
-| A3 | 50 µL tip rack (sample rack 3) — 3 racks only |
+| A2 | 50 µL tip rack (sample rack 2) |
+| A3 | 50 µL tip rack (sample rack 3) |
 | B1 | Temperature module + Opentrons Tough 4-well 72 mL reservoir, extraction solvent in well A1 (4 °C) |
 | B3 | 50 µL tip rack (QA/QC rack) |
 | C1 | Temperature module + Thermo Fisher 384-well plate, intermediate (4 °C) |
@@ -85,10 +81,10 @@ Dispenses 60 µL of UHPLC-MS-grade water into the final C18 plate, then transfer
 | Slot | Labware |
 |------|---------|
 | A1 | 50 µL filter tip rack (quadrant 1) |
-| A2 | 50 µL filter tip rack (quadrant 2) — 2 or 3 racks only |
-| A3 | 50 µL filter tip rack (quadrant 3) — 3 racks only |
+| A2 | 50 µL filter tip rack (quadrant 2) |
+| A3 | 50 µL filter tip rack (quadrant 3) |
 | B1 | Temperature module + 384-well plate, HILIC final (4 °C) |
-| B3 | 50 µL filter tip rack (QA/QC quadrant) |
+| B3 | 50 µL filter tip rack (QA/QC - quadrant 4) |
 | C1 | Temperature module + 384-well plate, C18 final (4 °C) |
 | C2 | NEST 195 mL reservoir (UHPLC-MS-grade water) |
 | C3 | 200 µL tip rack (water) — **load columns 1–3 only** |

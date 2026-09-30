@@ -35,8 +35,8 @@ version: 1.0.0
 date-released: "2026-09-30"
 license: MIT
 # Update these if the repository moves.
-repository-code: "https://github.com/CLUES-Emory/384wellplate-Exposomics-Opentrons-Protocols"
-url: "https://github.com/CLUES-Emory/384wellplate-Exposomics-Opentrons-Protocols"
+repository-code: "https://github.com/apat594/384wellplate-Exposomics-Opentrons-Protocols"
+url: "https://github.com/apat594/384wellplate-Exposomics-Opentrons-Protocols"
 # TODO after the first Zenodo release: add the version DOI here, e.g.
 # doi: "10.5281/zenodo.XXXXXXX"
 keywords:

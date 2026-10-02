@@ -75,26 +75,37 @@ RESERVOIR_X_OFFSET = -9     # mm
 # needs more anchor wells than the sample transfers: each ES anchor covers three
 # 384-plate columns (e.g. A1 -> columns 1, 3, 5).
 #
-# Extending the QA/QC quadrant:
-# ES_DEST_WELLS is what decides which wells receive extraction solvent, so the
-# number of QA/QC materials a run can hold is set by how many B-row anchors are
-# listed. With 3 sample racks every well already receives solvent, so the QA/QC
-# quadrant supports a full 96 QC materials as written. With 1 or 2 sample racks
-# only the B1 and B7 anchors are listed, which covers 48 QA/QC wells (6 columns
-# of the source rack) - enough for a typical partially filled QA/QC rack. To run
-# up to 96 QC materials in those configurations, add "B13" and "B19" to
-# ES_DEST_WELLS; those four B-row anchors together fill the entire QA/QC
-# quadrant. Solvent must always reach every well that will receive sample.
+# QA/QC capacity:
+# ES_DEST_WELLS decides which wells receive extraction solvent, so the number of
+# QA/QC materials a run can hold is set by how many B-row anchors are listed.
+# Every configuration below delivers solvent to the full QA/QC quadrant, so up
+# to 96 QA/QC materials are supported by default. The number and composition of
+# QA/QC materials is a per-batch decision, so this is an upper limit and not a
+# requirement - a partially filled QA/QC rack is expected, and wells that
+# receive solvent but no sample are simply left unused.
+#
+# To reduce solvent consumption when fewer QA/QC materials are needed, remove
+# B-row anchors from the end of the list. Each anchor covers 24 wells (3 columns
+# of the 384-well plate, equal to 2 columns of the 96-well source rack):
+#
+#   B1, B7, B13, B19  -> 96 QA/QC wells (default)
+#   B1, B7, B13       -> 72
+#   B1, B7            -> 48
+#   B1                -> 24
+#
+# Solvent must always reach every well that will receive sample, so never remove
+# an anchor covering a QA/QC source position that will be filled.
 #
 # To use a different layout, override ES_DEST_WELLS / SAMPLE_DEST_WELLS below.
 
 if NUM_SAMPLE_PLATES == 1:
-    ES_DEST_WELLS     = ["A1", "A7", "A13", "A19", "B1", "B7"]
+    ES_DEST_WELLS     = ["A1", "A7", "A13", "A19",
+                         "B1", "B7", "B13", "B19"]
     SAMPLE_DEST_WELLS = ["A1"]
     QAQC_DEST_WELL    = "B1"
 elif NUM_SAMPLE_PLATES == 2:
     ES_DEST_WELLS     = ["A1", "A2", "A7", "A8", "A13", "A14", "A19", "A20",
-                         "B1", "B7"]
+                         "B1", "B7", "B13", "B19"]
     SAMPLE_DEST_WELLS = ["A1", "A2"]
     QAQC_DEST_WELL    = "B1"
 elif NUM_SAMPLE_PLATES == 3:

@@ -115,23 +115,59 @@ Source racks occupy quadrants in order, and the QA/QC rack occupies the next ava
 
 Because quadrants are interleaved rather than contiguous, study samples and QA/QC materials are distributed across the entire plate. This arrangement permits plate row and column position effects to be evaluated following acquisition.
 
-Both destination plates in Step 2 share the source plate geometry, so each quadrant maps directly — anchor `A1` on the intermediate plate corresponds to anchor `A1` on the C18 and HILIC plates. Sample identity is preserved by position, requiring no remapping. Each sample should be tracked from its 96-well source position to its 384-well destination position and verified against the run list prior to initiating the run.
+![Mapping of four 96-well source racks onto one 384-well plate](docs/plate_mapping.svg)
 
-Note: give more info about mapping. maybe create a more intereactive figure or an image to show the mapping?
+### Determining a destination well
+
+For a source well in row *r* (A = 1, B = 2, … H = 8) and column *c* (1–12), the destination well on the 384-well plate is:
+
+```
+384 row    = 2r − 1 + row offset        (A = 1, B = 2, … P = 16)
+384 column = 2c − 1 + column offset
+```
+
+where the offsets are given by the quadrant:
+
+| Quadrant | Row offset | Column offset |
+|---|---|---|
+| `A1` | 0 | 0 |
+| `A2` | 0 | 1 |
+| `B1` | 1 | 0 |
+| `B2` | 1 | 1 |
+
+Worked examples:
+
+| Source well | → `A1` | → `A2` | → `B1` | → `B2` |
+|---|---|---|---|---|
+| `A1` | `A1` | `A2` | `B1` | `B2` |
+| `C5` | `E9` | `E10` | `F9` | `F10` |
+| `D7` | `G13` | `G14` | `H13` | `H14` |
+| `H12` | `O23` | `O24` | `P23` | `P24` |
+
+Each quadrant therefore occupies 96 of the 384 wells, and the four quadrants tile the plate exactly with no overlap.
+
+Both destination plates in Step 2 share the source plate geometry, so each quadrant maps directly — anchor `A1` on the intermediate plate corresponds to anchor `A1` on the C18 and HILIC plates. Sample identity is preserved by position, requiring no remapping between Step 1 and Step 2. Each sample should nonetheless be tracked from its 96-well source position to its 384-well destination position and verified against the run list prior to initiating the run.
 
 ### QA/QC capacity
 
-`ES_DEST_WELLS` determines which wells receive extraction solvent and therefore also determines the number of QA/QC materials a run can accommodate. Solvent must reach every well that will receive sample.
+The number and composition of QA/QC materials in a batch is not fixed. It depends on the assay, on the study design, and on what the analyst intends to evaluate — for example pooled study material for reproducibility assessment, matrix blanks, solvent blanks, calibration standards, or any combination of these. The QA/QC quadrant is therefore configurable, and should be populated according to the requirements of the assay and batch in question.
 
-| `NUM_SAMPLE_PLATES` | QA/QC wells receiving solvent, as configured | To accommodate a full 96 QC materials |
-|---|---|---|
-| 1 | 96 (6 columns of the source rack) | add `"B13"` and `"B19"` to `ES_DEST_WELLS` |
-| 2 | 96 (6 columns of the source rack) | add `"B13"` and `"B19"` to `ES_DEST_WELLS` |
-| 3 | 96 (the complete quadrant) | no modification required |
+**All configurations deliver extraction solvent to the full QA/QC quadrant by default, supporting up to 96 QA/QC materials.** This is an upper limit rather than a requirement: a partially filled QA/QC rack is expected, and wells that receive solvent but no sample are simply left unused. Such wells may be retained as method blanks if desired.
 
-Note: let's just do upto 96 as default for all sample plates. then give instructions for removing dest well for modifying amount of QC.
+`ES_DEST_WELLS` determines which wells receive extraction solvent and therefore sets this limit. Solvent must reach every well that will receive sample, so the list may be shortened but never below the positions actually in use.
 
-With 3 sample racks, every well on the plate receives solvent, and a full 96-material QA/QC rack is therefore supported without modification. With 1 or 2 sample racks, the default configuration accommodates a partially filled QA/QC rack; addition of the `B13` and `B19` anchors provides four B-row anchors, which together fill the entire QA/QC quadrant and support up to 96 QC materials.
+To reduce solvent consumption when fewer QA/QC materials are required, remove B-row anchors from the end of the list. Each anchor covers 24 wells of the QA/QC quadrant:
+
+| B-row anchors retained | QA/QC wells | Extraction solvent, 1 rack | 2 racks | 3 racks |
+|---|---|---|---|---|
+| all four (default) | 96 | 17.3 mL | 25.9 mL | 34.6 mL |
+| first three | 72 | 15.1 mL | 23.8 mL | 32.4 mL |
+| first two | 48 | 13.0 mL | 21.6 mL | 30.2 mL |
+| first only | 24 | 10.8 mL | 19.4 mL | 28.1 mL |
+
+The QA/QC anchors are `B1`, `B7`, `B13`, `B19` for 1 or 2 sample racks, and `B2`, `B8`, `B14`, `B20` for 3 sample racks. Volumes are dispensed volume only; see [Reagents](#reagents) for dead-volume guidance.
+
+The corresponding QA/QC well positions should be recorded in the run list.
 
 ## Requirements
 
@@ -145,15 +181,17 @@ With 3 sample racks, every well on the plate receives solvent, and a full 96-mat
 
 | Item | Opentrons API load name | Part Number | Used In |
 |------|-------------------------|-------------|---------|
-| Opentrons Flex 96 tip rack, 200 µL | `opentrons_flex_96_tiprack_200ul` | — | Steps 1, 2 |
-| Opentrons Flex 96 tip rack, 50 µL | `opentrons_flex_96_tiprack_50ul` | — | Step 1 |
+| Opentrons Flex 96 tip rack, 200 µL | `opentrons_flex_96_tiprack_200ul` | 991-00102 | Steps 1, 2 |
+| Opentrons Flex 96 tip rack, 50 µL | `opentrons_flex_96_tiprack_50ul` | 991-00101 | Step 1 |
 | Opentrons Flex 96 filter tip rack, 50 µL | `opentrons_flex_96_filtertiprack_50ul` | 991-00104 | Step 2 |
-| Opentrons Flex 96 tip rack adapter | `opentrons_flex_96_tiprack_adapter` | — | Steps 1, 2 |
+| Opentrons Flex 96 tip rack adapter | `opentrons_flex_96_tiprack_adapter` | 999-00202 | Steps 1, 2 |
 | Thermo Scientific Nunc 384-well plate, 250 µL | `thermofisher_384_wellplate_250ul` | 269390 | Steps 1, 2 |
 | Matrix 96-well tube rack, 1 mL | `matrix96well_96_tuberack_1000ul` | 14-754-690 | Step 1 |
-| Opentrons Tough 4-well reservoir, 72 mL | `opentrons_tough_4_reservoir_72ml` | — | Step 1 |
+| Opentrons Tough 4-well reservoir, 72 mL | `opentrons_tough_4_reservoir_72ml` | 999-00259 | Step 1 |
 | NEST 1-well reservoir, 195 mL | `nest_1_reservoir_195ml` | 999-00078 | Step 2 |
 | Easy Pierce heat-sealing foil | — | AB-0757 | Off-robot, following Steps 1 and 2 |
+
+Opentrons tips are supplied in boxes of 20 racks (1,920 tips). The part numbers above are the racked product; each is also available as a refill without racks under a different number (200 µL non-filter 991-00108, 50 µL non-filter 991-00107, 50 µL filter 991-00110), which these protocols cannot use because they require racks on the deck. The tip rack adapter is supplied as a 2-count pack, and both reservoirs as 25-count and 50-count packs respectively.
 
 The API load name is the identifier called by the protocol and is unambiguous; it should be matched when selecting labware in the Opentrons App. Catalog numbers should be verified against current vendor listings prior to ordering.
 
@@ -170,13 +208,15 @@ UHPLC-MS-grade solvents should be used throughout to minimize background contami
 
 | `NUM_SAMPLE_PLATES` | Wells filled | Extraction solvent (90 µL/well) | Water (60 µL/well) |
 |---|---|---|---|
-| 1 | 144 | 13.0 mL | 8.6 mL |
-| 2 | 240 | 21.6 mL | 14.4 mL |
+| 1 | 192 | 17.3 mL | 11.5 mL |
+| 2 | 288 | 25.9 mL | 17.3 mL |
 | 3 | 384 | 34.6 mL | 23.0 mL |
+
+Wells filled is the number of wells receiving extraction solvent, which with the default configuration comprises all study sample positions plus the complete QA/QC quadrant. Reducing the number of QA/QC wells reduces these volumes correspondingly; see [QA/QC capacity](#qaqc-capacity).
 
 These values represent dispensed volume only and exclude reservoir dead volume. Each reservoir should therefore be charged with a defined excess above the tabulated figure, sufficient to maintain the liquid level above the aspiration height (`ES_asp_depth`, 2 mm above the reservoir floor) for the duration of the run. Dead volume is dependent on reservoir geometry and on the aspiration height in use, and should be determined empirically for the specific labware employed. Insufficient excess will result in partial aspiration of air during the final deliveries, with a corresponding loss of volumetric accuracy in the affected wells.
 
-Note: i usually add 24mL of solvent for 2 plates. 
+In routine practice approximately 24 mL of extraction solvent is prepared for a 2-rack run. This is sufficient for up to 72 QA/QC materials (23.8 mL dispensed) but **not** for the full 96 (25.9 mL dispensed); a 2-rack run using the complete QA/QC quadrant requires approximately 28 mL to retain a comparable excess.
 
 ## Custom Labware
 
@@ -199,6 +239,8 @@ These JSON files must be uploaded to the Opentrons App prior to running the prot
 ├── labware/
 │   ├── thermofisher_384_wellplate_250ul.json
 │   └── matrix96well_96_tuberack_1000ul.json
+├── docs/
+│   └── plate_mapping.svg
 ├── CITATION.cff
 ├── LICENSE
 └── README.md

@@ -117,35 +117,6 @@ Because quadrants are interleaved rather than contiguous, study samples and QA/Q
 
 ![Mapping of four 96-well source racks onto one 384-well plate](docs/plate_mapping.png)
 
-### Determining a destination well
-
-For a source well in row *r* (A = 1, B = 2, … H = 8) and column *c* (1–12), the destination well on the 384-well plate is:
-
-```
-384 row    = 2r − 1 + row offset        (A = 1, B = 2, … P = 16)
-384 column = 2c − 1 + column offset
-```
-
-where the offsets are given by the quadrant:
-
-| Quadrant | Row offset | Column offset |
-|---|---|---|
-| `A1` | 0 | 0 |
-| `A2` | 0 | 1 |
-| `B1` | 1 | 0 |
-| `B2` | 1 | 1 |
-
-Worked examples:
-
-| Source well | → `A1` | → `A2` | → `B1` | → `B2` |
-|---|---|---|---|---|
-| `A1` | `A1` | `A2` | `B1` | `B2` |
-| `C5` | `E9` | `E10` | `F9` | `F10` |
-| `D7` | `G13` | `G14` | `H13` | `H14` |
-| `H12` | `O23` | `O24` | `P23` | `P24` |
-
-Each quadrant therefore occupies 96 of the 384 wells, and the four quadrants tile the plate exactly with no overlap.
-
 Both destination plates in Step 2 share the source plate geometry, so each quadrant maps directly — anchor `A1` on the intermediate plate corresponds to anchor `A1` on the C18 and HILIC plates. Sample identity is preserved by position, requiring no remapping between Step 1 and Step 2. Each sample should nonetheless be tracked from its 96-well source position to its 384-well destination position and verified against the run list prior to initiating the run.
 
 ### QA/QC capacity

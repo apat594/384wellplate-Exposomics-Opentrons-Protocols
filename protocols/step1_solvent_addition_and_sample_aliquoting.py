@@ -65,11 +65,13 @@ RESERVOIR_X_OFFSET = -9     # mm
 #   anchor A1 -> odd rows,  odd columns      anchor A2 -> odd rows,  even columns
 #   anchor B1 -> even rows, odd columns      anchor B2 -> even rows, even columns
 #
-# Sample racks fill quadrants in order; the QA/QC rack always takes the next
-# free quadrant. With 3 sample racks all four quadrants are used, so study
-# samples and QA/QC materials end up interleaved across the whole plate rather
-# than blocked together - this is what allows plate position effects to be
-# evaluated after acquisition.
+# Sample racks fill quadrants in order (A1, then A2, then B1), and the QA/QC
+# rack always occupies quadrant B2, whatever the sample rack count. Keeping
+# QA/QC in a fixed quadrant means the QA/QC plate map does not change between
+# runs of different sizes. Because quadrants are interleaved, study samples and
+# QA/QC materials are distributed across the whole plate rather than blocked
+# together - this is what allows plate position effects to be evaluated after
+# acquisition.
 #
 # Extraction solvent is delivered with only 3 columns of tips at a time, so it
 # needs more anchor wells than the sample transfers: each ES anchor covers three
@@ -85,13 +87,14 @@ RESERVOIR_X_OFFSET = -9     # mm
 # receive solvent but no sample are simply left unused.
 #
 # To reduce solvent consumption when fewer QA/QC materials are needed, remove
-# B-row anchors from the end of the list. Each anchor covers 24 wells (3 columns
-# of the 384-well plate, equal to 2 columns of the 96-well source rack):
+# anchors from the end of the QA/QC group. Because QA/QC is always quadrant B2,
+# that group is the same in every configuration. Each anchor covers 24 wells
+# (3 columns of the 384-well plate, equal to 2 columns of the source rack):
 #
-#   B1, B7, B13, B19  -> 96 QA/QC wells (default)
-#   B1, B7, B13       -> 72
-#   B1, B7            -> 48
-#   B1                -> 24
+#   B2, B8, B14, B20  -> 96 QA/QC wells (default)
+#   B2, B8, B14       -> 72
+#   B2, B8            -> 48
+#   B2                -> 24
 #
 # Solvent must always reach every well that will receive sample, so never remove
 # an anchor covering a QA/QC source position that will be filled.
@@ -100,14 +103,14 @@ RESERVOIR_X_OFFSET = -9     # mm
 
 if NUM_SAMPLE_PLATES == 1:
     ES_DEST_WELLS     = ["A1", "A7", "A13", "A19",
-                         "B1", "B7", "B13", "B19"]
+                         "B2", "B8", "B14", "B20"]
     SAMPLE_DEST_WELLS = ["A1"]
-    QAQC_DEST_WELL    = "B1"
+    QAQC_DEST_WELL    = "B2"
 elif NUM_SAMPLE_PLATES == 2:
     ES_DEST_WELLS     = ["A1", "A2", "A7", "A8", "A13", "A14", "A19", "A20",
-                         "B1", "B7", "B13", "B19"]
+                         "B2", "B8", "B14", "B20"]
     SAMPLE_DEST_WELLS = ["A1", "A2"]
-    QAQC_DEST_WELL    = "B1"
+    QAQC_DEST_WELL    = "B2"
 elif NUM_SAMPLE_PLATES == 3:
     ES_DEST_WELLS     = ["A1", "A2", "A7", "A8", "A13", "A14", "A19", "A20",
                          "B1", "B2", "B7", "B8", "B13", "B14", "B19", "B20"]

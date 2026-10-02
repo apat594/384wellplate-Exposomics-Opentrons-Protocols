@@ -57,14 +57,17 @@ solvent_airgap_rate    = 15     # uL/sec (air gap aspiration only)
 #
 # One tip rack is consumed per quadrant. The QA/QC quadrant always runs last.
 #
+# QA/QC always occupies quadrant B2, whatever the sample rack count, so it must
+# match QAQC_DEST_WELL in Step 1:
+#
 #   3 sample racks + QA/QC -> A1, A2, B1 (samples) + B2 (QA/QC): the whole plate
-#   2 sample racks + QA/QC -> A1, A2     (samples) + B1 (QA/QC)
-#   1 sample rack  + QA/QC -> A1         (sample)  + B1 (QA/QC)
+#   2 sample racks + QA/QC -> A1, A2     (samples) + B2 (QA/QC)
+#   1 sample rack  + QA/QC -> A1         (sample)  + B2 (QA/QC)
 
 if NUM_SAMPLE_PLATES == 1:
-    SOLVENT_DEST_WELLS = ["A1", "B1"]
+    SOLVENT_DEST_WELLS = ["A1", "B2"]
 elif NUM_SAMPLE_PLATES == 2:
-    SOLVENT_DEST_WELLS = ["A1", "A2", "B1"]
+    SOLVENT_DEST_WELLS = ["A1", "A2", "B2"]
 elif NUM_SAMPLE_PLATES == 3:
     SOLVENT_DEST_WELLS = ["A1", "A2", "B1", "B2"]
 else:

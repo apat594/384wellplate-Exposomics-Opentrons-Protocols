@@ -105,17 +105,17 @@ The Flex 96-channel head has 9 mm tip spacing; a 384-well plate has 4.5 mm well 
 | `B1` | even rows, odd columns |
 | `B2` | even rows, even columns |
 
-Source racks occupy quadrants in order, and the QA/QC rack occupies the next available quadrant:
+Source racks occupy quadrants in order, and the QA/QC rack always occupies quadrant `B2`, whatever the sample rack count. Keeping QA/QC in a fixed quadrant means the QA/QC plate map does not change between runs of different sizes.
 
 | `NUM_SAMPLE_PLATES` | Sample quadrants | QA/QC quadrant | Maximum Study samples |
 |---|---|---|---|
-| 1 | `A1` | `B1` | 96 |
-| 2 | `A1`, `A2` | `B1` | 192 |
+| 1 | `A1` | `B2` | 96 |
+| 2 | `A1`, `A2` | `B2` | 192 |
 | 3 | `A1`, `A2`, `B1` | `B2` | 288 |
 
 Because quadrants are interleaved rather than contiguous, study samples and QA/QC materials are distributed across the entire plate. This arrangement permits plate row and column position effects to be evaluated following acquisition.
 
-![Mapping of four 96-well source racks onto one 384-well plate](docs/plate_mapping.svg)
+![Mapping of four 96-well source racks onto one 384-well plate](docs/plate_mapping.png)
 
 ### Determining a destination well
 
@@ -156,16 +156,18 @@ The number and composition of QA/QC materials in a batch is not fixed. It depend
 
 `ES_DEST_WELLS` determines which wells receive extraction solvent and therefore sets this limit. Solvent must reach every well that will receive sample, so the list may be shortened but never below the positions actually in use.
 
-To reduce solvent consumption when fewer QA/QC materials are required, remove B-row anchors from the end of the list. Each anchor covers 24 wells of the QA/QC quadrant:
+To reduce solvent consumption when fewer QA/QC materials are required, remove anchors from the end of the QA/QC group. Because QA/QC is always quadrant `B2`, that group is `B2`, `B8`, `B14`, `B20` in every configuration. Each anchor covers 24 wells of the quadrant:
 
-| B-row anchors retained | QA/QC wells | Extraction solvent, 1 rack | 2 racks | 3 racks |
+| QA/QC anchors retained | QA/QC wells | Extraction solvent, 1 rack | 2 racks | 3 racks |
 |---|---|---|---|---|
-| all four (default) | 96 | 17.3 mL | 25.9 mL | 34.6 mL |
-| first three | 72 | 15.1 mL | 23.8 mL | 32.4 mL |
-| first two | 48 | 13.0 mL | 21.6 mL | 30.2 mL |
-| first only | 24 | 10.8 mL | 19.4 mL | 28.1 mL |
+| `B2`, `B8`, `B14`, `B20` (default) | 96 | 17.3 mL | 25.9 mL | 34.6 mL |
+| `B2`, `B8`, `B14` | 72 | 15.1 mL | 23.8 mL | 32.4 mL |
+| `B2`, `B8` | 48 | 13.0 mL | 21.6 mL | 30.2 mL |
+| `B2` | 24 | 10.8 mL | 19.4 mL | 28.1 mL |
 
-The QA/QC anchors are `B1`, `B7`, `B13`, `B19` for 1 or 2 sample racks, and `B2`, `B8`, `B14`, `B20` for 3 sample racks. Volumes are dispensed volume only; see [Reagents](#reagents) for dead-volume guidance.
+Volumes are dispensed volume only; see [Reagents](#reagents) for dead-volume guidance.
+
+`SOLVENT_DEST_WELLS` in Step 2 must list the same quadrants as Step 1, including `B2`.
 
 The corresponding QA/QC well positions should be recorded in the run list.
 
@@ -240,7 +242,7 @@ These JSON files must be uploaded to the Opentrons App prior to running the prot
 │   ├── thermofisher_384_wellplate_250ul.json
 │   └── matrix96well_96_tuberack_1000ul.json
 ├── docs/
-│   └── plate_mapping.svg
+│   └── plate_mapping.png
 ├── CITATION.cff
 ├── LICENSE
 └── README.md

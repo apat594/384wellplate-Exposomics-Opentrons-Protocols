@@ -1,13 +1,13 @@
 # Opentrons Flex Protocols for 384-Well Sample Preparation for Nontargeted Exposomics
 
-Python-based Opentrons Flex protocols and labware definitions for ultra-high-throughput protein-precipitation sample preparation of biosamples, performed in the 384-well format. These protocols automate the sample preparation workflow described in:
+Python-based Opentrons Flex protocols and labware definitions for ultra-high-throughput protein-precipitation sample preparation of biological samples, performed in the 384-well format. These protocols automate the sample preparation workflow described in:
 
 > **An Ultra-High-Throughput 384-Well Sample Preparation Workflow for Nontargeted Exposomics Across Four LC-HRMS Assays**
 > [Author list and journal citation to be added upon publication]
 
 ## Overview
 
-This repository contains two protocols for the Opentrons Flex liquid handler that prepare a full 384-well plate — up to **288 study samples plus up to 96 QA/QC materials** — using only **30 µL sample**.
+This repository contains two protocols for the Opentrons Flex liquid handler that prepare a full 384-well plate — up to **288 study samples plus up to 96 QA/QC materials** — using only **30 µL of sample**.
 
 A single protein-precipitation extraction is divided into aliquots for two complementary chromatographic platforms, each acquired in positive and negative electrospray ionization mode, yielding **four nontargeted assays from one preparation**.
 
@@ -19,13 +19,13 @@ The protocols employ the Opentrons Flex 96-channel 1000 µL pipette. Because the
 
 | Step | Protocol | Description | Hands-on time |
 |------|----------|-------------|---------------|
-| 1 | — | **Off-robot:** Thaw plasma at 4 °C (1 h). Set temperature modules, centrifuge and thermomixer to 4 °C; preheat heat sealer to 165 °C | ~5 min |
+| 1 | — | **Off-robot:** Thaw samples at 4 °C (1 h). Set temperature modules, centrifuge and thermomixer to 4 °C; preheat heat sealer to 165 °C | ~5 min |
 | 2 | — | **Off-robot:** Vortex-mix racks 10 min at 1,100 rpm, 4 °C; centrifuge 2 min at 4,500 rpm, 4 °C | ~5 min |
 | 3 | — | **Off-robot:** Scan sample racks and verify sample IDs against the run list | ~5 min |
-| 4 | `step1_solvent_addition_and_sample_aliquoting.py` | Dispense 90 µL extraction solvent into the 384-well plate, then 30 µL plasma from each source rack | ~10 min |
+| 4 | `step1_solvent_addition_and_sample_aliquoting.py` | Dispense 90 µL extraction solvent into the 384-well plate, then 30 µL sample from each source rack | ~10 min |
 | 5 | — | **Off-robot:** Heat-seal at 165 °C for 1.5 s and press with a roller | ~2 min |
-| 6 | — | **Off-robot:** Vortex-mix 30 min at 1,100 rpm, 4 °C to precipitate protein and extract analytes. *Unattended* — prepare Step 2 and return remaining samples to −80 °C storage during this interval | ~2 min |
-| 7 | — | **Off-robot:** Centrifuge 2 min at 4,500 rpm, 4 °C to pellet precipitated protein | 2 min |
+| 6 | — | **Off-robot:** Vortex-mix 30 min at 1,100 rpm, 4 °C to precipitate protein and extract analytes. Prepare Step 2 and return remaining samples to −80 °C storage during this interval | ~2 min |
+| 7 | — | **Off-robot:** Centrifuge 2 min at 4,500 rpm, 4 °C to pellet precipitated protein | ~2 min |
 | 8 | `step2_dilution_and_supernatant_transfer.py` | Dispense 60 µL water into the C18 plate, then transfer 30 µL supernatant to C18 and 40 µL to HILIC | ~10 min |
 | 9 | — | **Off-robot:** Heat-seal both plates, centrifuge, then vortex-mix 10 min at 2,000 rpm, 4 °C | ~4 min |
 
@@ -61,6 +61,8 @@ Dispenses 90 µL of extraction solvent (60:40 v/v methanol/acetonitrile containi
 | D1 | Temperature module + Matrix 96-well tube rack, samples (4 °C) |
 | D3 | Trash bin |
 
+Slot A2 is loaded only when `NUM_SAMPLE_PLATES` is 2 or 3, and slot A3 only when it is 3. The protocol does not load a tip rack it will not use.
+
 **Manual interventions (protocol pauses):**
 1. Place the first uncapped sample rack in D1
 2. Replace the sample rack between each source rack, concluding with the QA/QC rack
@@ -80,16 +82,18 @@ Dispenses 60 µL of UHPLC-MS-grade water into the final C18 plate, then transfer
 
 | Slot | Labware |
 |------|---------|
-| A1 | 50 µL filter tip rack (quadrant 1) |
-| A2 | 50 µL filter tip rack (quadrant 2) |
-| A3 | 50 µL filter tip rack (quadrant 3) |
+| A1 | 50 µL filter tip rack (quadrant `A1`) |
+| A2 | 50 µL filter tip rack (quadrant `A2`) |
+| A3 | 50 µL filter tip rack (quadrant `B1`) |
 | B1 | Temperature module + 384-well plate, HILIC final (4 °C) |
-| B3 | 50 µL filter tip rack (QA/QC - quadrant 4) |
+| B3 | 50 µL filter tip rack (QA/QC, quadrant `B2`) |
 | C1 | Temperature module + 384-well plate, C18 final (4 °C) |
 | C2 | NEST 195 mL reservoir (UHPLC-MS-grade water) |
-| C3 | 200 µL tip rack (water) |
+| C3 | 200 µL tip rack (water) — **add tips to columns 1–3 only** |
 | D1 | Temperature module + 384-well plate, intermediate from Step 1 (4 °C) |
 | D3 | Trash bin |
+
+As in Step 1, slot A2 is loaded only when `NUM_SAMPLE_PLATES` is 2 or 3, and slot A3 only when it is 3.
 
 **Manual interventions (protocol pauses):**
 1. Following water addition: place the centrifuged intermediate plate in D1 and remove its seal
@@ -129,7 +133,7 @@ The number and composition of QA/QC materials in a batch is not fixed. It depend
 
 To reduce solvent consumption when fewer QA/QC materials are required, remove anchors from the end of the QA/QC group. Because QA/QC is always quadrant `B2`, that group is `B2`, `B8`, `B14`, `B20` in every configuration. Each anchor covers 24 wells of the quadrant:
 
-| QA/QC anchors retained | QA/QC wells | Extraction solvent, 1 rack | 2 racks | 3 racks |
+| QA/QC anchors retained | QA/QC wells | Extraction solvent, 1 rack | Extraction solvent, 2 racks | Extraction solvent, 3 racks |
 |---|---|---|---|---|
 | `B2`, `B8`, `B14`, `B20` (default) | 96 | 17.3 mL | 25.9 mL | 34.6 mL |
 | `B2`, `B8`, `B14` | 72 | 15.1 mL | 23.8 mL | 32.4 mL |
@@ -225,8 +229,8 @@ These JSON files must be uploaded to the Opentrons App prior to running the prot
 2. Set `NUM_SAMPLE_PLATES` at the top of **both** protocols to the same value (1, 2, or 3).
 3. Set `sample_asp_depth` in Step 1 according to the sample volume and matrix in use (see below).
 4. Calibrate the Flex 96-channel pipette and verify the deck layout for each step.
-5. Load tips in **columns 1–3 only** of the 200 µL extraction solvent tip racks. All remaining racks are fully loaded.
-6. Fill the reservoirs with appropriate solvent before starting each protocol.
+5. Load tips in **columns 1–3 only** of the 200 µL tip rack in slot C3, in both protocols. All remaining racks are fully loaded.
+6. Fill the reservoirs with the appropriate reagent before starting each protocol — extraction solvent in Step 1, water in Step 2.
 7. Run Step 1, perform the off-robot sealing, mixing, and centrifugation steps, then run Step 2.
 8. Follow the on-screen pause prompts when replacing racks and plates.
 
@@ -234,11 +238,11 @@ For validation runs, `RETURN_TIPS_TO_RACK = True` returns each tip to its rack r
 
 ## Adjustable Parameters
 
-Volumes, flow rates and heights are defined as named variables at the top of each protocol. 
+Volumes, flow rates and heights are defined as named variables at the top of each protocol. The protocols ship with `NUM_SAMPLE_PLATES = 3`.
 
 | Parameter | Default | Protocol | Notes |
 |-----------|---------|----------|-------|
-| `sample_vol` | 30 µL | Step 1 | Plasma per sample |
+| `sample_vol` | 30 µL | Step 1 | Sample volume aliquoted per well |
 | `sample_asp_depth` | 3 mm | Step 1 | Above the tube bottom. Adjust according to sample volume and matrix; 3–6 mm is the working range, with 3 mm applied to low-volume specimens |
 | `ES_vol` | 90 µL | Step 1 | Extraction solvent per well |
 | `ES_asp_rate` / `ES_disp_rate` | 92 / 40 µL/s | Step 1 | |
@@ -250,7 +254,7 @@ Volumes, flow rates and heights are defined as named variables at the top of eac
 | `sup_asp_depth` | 4.5 mm | Step 2 | Above the well bottom, clear of the protein pellet |
 | `sup_asp_rate` / `sup_disp_rate` | 5 / 10 µL/s | Step 2 | Reduced rates are applied to accommodate the shallow 384-well geometry |
 
-> **Tip capacity constraint.** Sample and supernatant transfers utilize the full 50 µL tip capacity: in Step 1, a 20 µL leading air plug plus 30 µL plasma; in Step 2, a 15 µL leading air plug plus 30 µL supernatant plus a 5 µL air gap. No additional capacity remains. Any increase to `sample_vol`, `sup_vol_C18`, or to an air gap volume will exceed tip capacity and cause the protocol to fail. A larger transfer volume requires a corresponding reduction in the air plug, or the use of a higher-capacity tip.
+> **Tip capacity constraint.** Sample and supernatant transfers utilize the full 50 µL tip capacity: in Step 1, a 20 µL leading air plug plus 30 µL sample; in Step 2, a 15 µL leading air plug plus 30 µL supernatant plus a 5 µL air gap. No additional capacity remains. Any increase to `sample_vol`, `sup_vol_C18`, or to an air gap volume will exceed tip capacity and cause the protocol to fail. A larger transfer volume requires a corresponding reduction in the air plug, or the use of a higher-capacity tip.
 
 ## Citation
 

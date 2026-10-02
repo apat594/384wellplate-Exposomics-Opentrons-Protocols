@@ -189,7 +189,7 @@ Wells filled is the number of wells receiving extraction solvent, which with the
 
 These values represent dispensed volume only and exclude reservoir dead volume. Each reservoir should therefore be charged with a defined excess above the tabulated figure, sufficient to maintain the liquid level above the aspiration height (`ES_asp_depth`, 2 mm above the reservoir floor) for the duration of the run. Dead volume is dependent on reservoir geometry and on the aspiration height in use, and should be determined empirically for the specific labware employed. Insufficient excess will result in partial aspiration of air during the final deliveries, with a corresponding loss of volumetric accuracy in the affected wells.
 
-In routine practice approximately 24 mL of extraction solvent is prepared for a 2-rack run. This is sufficient for up to 72 QA/QC materials (23.8 mL dispensed) but **not** for the full 96 (25.9 mL dispensed); a 2-rack run using the complete QA/QC quadrant requires approximately 28 mL to retain a comparable excess.
+In routine practice, 24 mL of extraction solvent is prepared for a 2-rack run. This is sufficient for up to 48 QA/QC materials, which dispense 21.6 mL and leave 2.4 mL of excess, but **not** for the full 96 (25.9 mL dispensed, exceeding the 24 mL prepared by 1.9 mL). A 2-rack run using the complete QA/QC quadrant therefore requires approximately 28 mL to retain a comparable excess. At 72 QA/QC materials the 24 mL is technically sufficient (23.8 mL dispensed) but leaves only 0.2 mL, which is below the reservoir dead volume and should not be relied upon.
 
 ## Custom Labware
 
